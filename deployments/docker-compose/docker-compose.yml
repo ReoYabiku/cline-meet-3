@@ -1,0 +1,80 @@
+version: '3.8'
+
+services:
+  redis:
+    image: redis:7-alpine
+    container_name: signaling-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+    networks:
+      - signaling-network
+
+  coturn:
+    build:
+      context: ../../
+      dockerfile: deployments/docker/coturn/Dockerfile
+    container_name: signaling-coturn
+    ports:
+      - "3478:3478/udp"
+      - "3478:3478/tcp"
+      - "5349:5349/udp"
+      - "5349:5349/tcp"
+      - "49152-49252:49152-49252/udp"
+    volumes:
+      - coturn_logs:/var/log/coturn
+    environment:
+      - TURN_USERNAME=webrtc
+      - TURN_PASSWORD=password123
+    networks:
+      - signaling-network
+    restart: unless-stopped
+
+  signaling:
+    build:
+      context: ../../
+      dockerfile: deployments/docker/signaling/Dockerfile
+    container_name: signaling-server
+    ports:
+      - "8080:8080"
+    environment:
+      - SERVER_HOST=0.0.0.0
+      - SERVER_PORT=8080
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=
+      - REDIS_DB=0
+      - STUN_URL=stun:coturn:3478
+      - TURN_URL=turn:coturn:3478
+      - READ_TIMEOUT=60
+      - WRITE_TIMEOUT=60
+    depends_on:
+      redis:
+        condition: service_healthy
+      coturn:
+        condition: service_started
+    networks:
+      - signaling-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+
+volumes:
+  redis_data:
+    driver: local
+  coturn_logs:
+    driver: local
+
+networks:
+  signaling-network:
+    driver: bridge

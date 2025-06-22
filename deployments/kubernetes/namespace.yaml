@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: webrtc-signaling
+  labels:
+    name: webrtc-signaling
+    app: signaling-server

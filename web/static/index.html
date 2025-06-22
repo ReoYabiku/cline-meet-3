@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebRTC Signaling Test</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>WebRTC Signaling Test</h1>
+        
+        <div class="controls">
+            <div class="input-group">
+                <label for="roomId">Room ID:</label>
+                <input type="text" id="roomId" placeholder="Enter room ID" value="test-room">
+                <button id="joinBtn">Join Room</button>
+                <button id="leaveBtn" disabled>Leave Room</button>
+            </div>
+            
+            <div class="status">
+                <span id="connectionStatus">Disconnected</span>
+                <span id="roomStatus"></span>
+            </div>
+        </div>
+
+        <div class="video-container">
+            <div class="video-section">
+                <h3>Local Video</h3>
+                <video id="localVideo" autoplay muted playsinline></video>
+                <button id="startVideoBtn">Start Video</button>
+                <button id="stopVideoBtn" disabled>Stop Video</button>
+            </div>
+            
+            <div class="video-section">
+                <h3>Remote Videos</h3>
+                <div id="remoteVideos"></div>
+            </div>
+        </div>
+
+        <div class="logs">
+            <h3>Logs</h3>
+            <div id="logContainer"></div>
+            <button id="clearLogsBtn">Clear Logs</button>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

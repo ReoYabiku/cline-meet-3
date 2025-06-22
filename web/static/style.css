@@ -1,0 +1,266 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f5f5;
+    color: #333;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 30px;
+    font-size: 2.5em;
+}
+
+h3 {
+    color: #34495e;
+    margin-bottom: 15px;
+    font-size: 1.2em;
+}
+
+.controls {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    margin-bottom: 30px;
+}
+
+.input-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+}
+
+.input-group label {
+    font-weight: 600;
+    min-width: 80px;
+}
+
+.input-group input {
+    flex: 1;
+    min-width: 200px;
+    padding: 10px;
+    border: 2px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: #3498db;
+}
+
+button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+}
+
+button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+#joinBtn {
+    background-color: #27ae60;
+    color: white;
+}
+
+#joinBtn:hover:not(:disabled) {
+    background-color: #229954;
+}
+
+#leaveBtn {
+    background-color: #e74c3c;
+    color: white;
+}
+
+#leaveBtn:hover:not(:disabled) {
+    background-color: #c0392b;
+}
+
+#startVideoBtn {
+    background-color: #3498db;
+    color: white;
+}
+
+#startVideoBtn:hover:not(:disabled) {
+    background-color: #2980b9;
+}
+
+#stopVideoBtn {
+    background-color: #95a5a6;
+    color: white;
+}
+
+#stopVideoBtn:hover:not(:disabled) {
+    background-color: #7f8c8d;
+}
+
+#clearLogsBtn {
+    background-color: #f39c12;
+    color: white;
+}
+
+#clearLogsBtn:hover {
+    background-color: #e67e22;
+}
+
+.status {
+    display: flex;
+    gap: 20px;
+    font-weight: 600;
+}
+
+#connectionStatus {
+    padding: 5px 10px;
+    border-radius: 4px;
+    color: white;
+    background-color: #e74c3c;
+}
+
+#connectionStatus.connected {
+    background-color: #27ae60;
+}
+
+#roomStatus {
+    padding: 5px 10px;
+    border-radius: 4px;
+    background-color: #ecf0f1;
+    color: #2c3e50;
+}
+
+.video-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+.video-section {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+video {
+    width: 100%;
+    max-width: 400px;
+    height: 300px;
+    background-color: #000;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    object-fit: cover;
+}
+
+#remoteVideos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+.remote-video-container {
+    position: relative;
+}
+
+.remote-video-container video {
+    width: 100%;
+    height: 150px;
+}
+
+.remote-video-label {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    background: rgba(0,0,0,0.7);
+    color: white;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+.logs {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+#logContainer {
+    height: 200px;
+    overflow-y: auto;
+    background-color: #2c3e50;
+    color: #ecf0f1;
+    padding: 15px;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    margin-bottom: 15px;
+    white-space: pre-wrap;
+}
+
+.log-entry {
+    margin-bottom: 5px;
+    padding: 2px 0;
+}
+
+.log-entry.info {
+    color: #3498db;
+}
+
+.log-entry.success {
+    color: #27ae60;
+}
+
+.log-entry.warning {
+    color: #f39c12;
+}
+
+.log-entry.error {
+    color: #e74c3c;
+}
+
+.log-timestamp {
+    color: #95a5a6;
+    font-size: 11px;
+}
+
+@media (max-width: 768px) {
+    .video-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .input-group {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .input-group label {
+        min-width: auto;
+    }
+    
+    .status {
+        flex-direction: column;
+        gap: 10px;
+    }
+}

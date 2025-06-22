@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: signaling-service
+  namespace: webrtc-signaling
+  labels:
+    app: signaling-server
+spec:
+  selector:
+    app: signaling-server
+  ports:
+  - port: 8080
+    targetPort: 8080
+    protocol: TCP
+    name: http
+  type: ClusterIP
+  sessionAffinity: ClientIP
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: 10800

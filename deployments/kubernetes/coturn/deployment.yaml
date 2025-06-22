@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: coturn-deployment
+  namespace: webrtc-signaling
+  labels:
+    app: coturn
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: coturn
+  template:
+    metadata:
+      labels:
+        app: coturn
+    spec:
+      containers:
+      - name: coturn
+        image: coturn/coturn:latest
+        ports:
+        - containerPort: 3478
+          protocol: UDP
+          name: stun-udp
+        - containerPort: 3478
+          protocol: TCP
+          name: stun-tcp
+        - containerPort: 5349
+          protocol: UDP
+          name: turns-udp
+        - containerPort: 5349
+          protocol: TCP
+          name: turns-tcp
+        command:
+        - turnserver
+        - -c
+        - /etc/coturn/turnserver.conf
+        volumeMounts:
+        - name: coturn-config
+          mountPath: /etc/coturn
+        - name: coturn-logs
+          mountPath: /var/log/coturn
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          exec:
+            command:
+            - /bin/sh
+            - -c
+            - "turnutils_stunclient -p 3478 127.0.0.1"
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          timeoutSeconds: 10
+          failureThreshold: 3
+        readinessProbe:
+          exec:
+            command:
+            - /bin/sh
+            - -c
+            - "turnutils_stunclient -p 3478 127.0.0.1"
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+      volumes:
+      - name: coturn-config
+        configMap:
+          name: coturn-config
+      - name: coturn-logs
+        emptyDir: {}
